@@ -7,7 +7,7 @@ export async function POST(req){
     const data = await req.json()
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});
 
-    const prompt = "What are you made of?"
+    const prompt = "What is diameter of earth?"
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
