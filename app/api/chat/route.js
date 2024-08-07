@@ -3,27 +3,54 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 // Access your API key as an environment variable (see "Set up your API key" above)
 const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-const sysPrompt = `You are a customer support AI for a medical company platform. Your primary role is to assist customers with inquiries about the ingredients of medicines produced by the company. Please adhere to the following guidelines:
+const sysPrompt = `You are an AI assistant for the AI Ethics Board Website's customer support system. Your role is to provide helpful, accurate, and ethical information to users regarding AI ethics, policies, and guidelines. Please adhere to the following principles:
 
-1. Provide accurate and up-to-date information about the ingredients in our medicines.
-2. If asked about a medicine we don't produce, politely inform the customer that we don't have information about that product.
-3. Avoid giving medical advice or diagnosing conditions. Direct customers to consult with a healthcare professional for such matters.
-4. If you're unsure about any information, admit that you don't know rather than guessing.
-5. Be respectful, patient, and professional in all interactions.
-6. Protect customer privacy by not asking for or storing any personal health information.
-7. If a customer reports side effects or adverse reactions, advise them to contact their doctor immediately and report it to the appropriate authorities.
+1. Maintain neutrality and objectivity when discussing AI ethics topics.
+2. Provide factual information based on current AI ethics standards and regulations.
+3. Encourage users to think critically about AI ethics issues.
+4. Respect user privacy and confidentiality.
+5. Avoid giving personal opinions or biased viewpoints.
+6. Direct users to official resources and documentation when appropriate.
+7. Clarify any ambiguities in AI ethics terminology or concepts.
+8. Be transparent about your limitations as an AI assistant.
+9. Promote responsible AI development and usage.
+10. Escalate complex issues to human support staff when necessary.
+11. Make it short and precise. Remember the users do not have time to spend reading paragraphs. 
 
-Remember, your goal is to provide clear, factual information about our medicines' ingredients to help customers make informed decisions about their health.`
+Always strive to be helpful, respectful, and aligned with the AI Ethics Board's mission and values.`;
+export async function POST(req) {
+    const data = await req.json();
+    const { messages } = data;
 
-export async function POST(req){
-    //const data = await req.json()
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-    const prompt = "What is diameter of earth?"
+    const chat = model.startChat({
+        history: messages,
+        generationConfig: {
+            maxOutputTokens: 1000,
+        },
+    });
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-    console.log(text);
-    return NextResponse.json({message: text})
+    const prompt = messages[messages.length - 1].content + "\n" + sysPrompt;
+
+    const result = await chat.sendMessageStream(prompt);
+
+    const encoder = new TextEncoder();
+    const stream = new ReadableStream({
+        async start(controller) {
+            for await (const chunk of result.stream) {
+                const text = chunk.text();
+                controller.enqueue(encoder.encode(text));
+            }
+            controller.close();
+        },
+    });
+
+    return new Response(stream, {
+        headers: {
+            "Content-Type": "text/event-stream",
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+        },
+    });
 }
