@@ -57,10 +57,11 @@ export default function Home() {
                 //sx={style}
                 backgroundColor={
                   message.role === "assistant"
-                    ? "blue"
+                    ? "lightblue"
                     : "secondary.main"
                 }
-                color="white"
+                color="black"
+                fontWeight={500}
                 borderRadius={16}
                 padding={3}
               >
