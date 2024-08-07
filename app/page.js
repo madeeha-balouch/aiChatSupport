@@ -6,7 +6,7 @@ import { Box } from "@mui/system";
 export default function Home() {
   const [messages, setMessages] = useState({
     role: "assistant",
-    content: "Hi I'm you support agent today, how can I assist you today?",
+    content: "Hi! I'm you support agent today, how can I assist you today?",
   });
 
   const [message, setMessage] = useState("");
