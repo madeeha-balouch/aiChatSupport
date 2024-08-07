@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Box, Stack } from "@mui/system";
 import { Button, TextField } from "@mui/material";
 
+
 const style = {
   backgroundColor: "lightgray",
   color: "white",
@@ -20,6 +21,45 @@ export default function Home() {
   ]);
 
   const [message, setMessage] = useState("");
+
+  const sendMessages = async () => {
+    setMessage("");
+    setMessages((messages) => [
+      ...messages,
+      { role: "user", content: message },
+      { role: "assistant", content: "" },
+    ]);
+    const response = fetch("api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify([...messages, { role: "user", content: message }]),
+    }).then(async (res) => {
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+
+      let result = "";
+      return reader.read().then(function processText({ done, value }) {
+        if (done) {
+          return result;
+        }
+        const text = decoder.decode(value || new Int8Array(), { stream: true });
+        setMessages((messages) => {
+          let lastMessage = messages[messages.length - 1];
+          let otherMessages = messages.slice(0, messages.length - 1);
+          return [
+            ...otherMessages,
+            {
+              ...lastMessage,
+              content: lastMessage.content + text,
+            },
+          ];
+        });
+        return reader.read().then(processText)
+      });
+    });
+  };
 
   return (
     <Box
@@ -56,16 +96,14 @@ export default function Home() {
               <Box
                 //sx={style}
                 backgroundColor={
-                  message.role === "assistant"
-                    ? "lightblue"
-                    : "secondary.main"
+                  message.role === "assistant" ? "lightblue" : "secondary.main"
                 }
                 color="black"
                 fontWeight={500}
                 borderRadius={16}
                 padding={3}
               >
-                {message.content || "No message content"}
+                {message.content}
               </Box>
             </Box>
           ))}
@@ -77,7 +115,7 @@ export default function Home() {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
           />
-          <Button variant="contained">send</Button>
+          <Button variant="contained" onClick={sendMessages}>send</Button>
         </Stack>
       </Stack>
     </Box>

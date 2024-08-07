@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 // Access your API key as an environment variable (see "Set up your API key" above)
@@ -15,42 +16,37 @@ const sysPrompt = `You are an AI assistant for the AI Ethics Board Website's cus
 8. Be transparent about your limitations as an AI assistant.
 9. Promote responsible AI development and usage.
 10. Escalate complex issues to human support staff when necessary.
-11. Make it short and precise. Remember the users do not have time to spend reading paragraphs. 
+11. Make it short and precise. Remember the users do not have time to spend reading paragraphs
 
-Always strive to be helpful, respectful, and aligned with the AI Ethics Board's mission and values.`;
+Always strive to be helpful, respectful, and aligned with the AI Ethics Board's mission and values.
+You do not need to respond exclusively for the system prompt`;
 export async function POST(req) {
-    const data = await req.json();
-    const { messages } = data;
-
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const data = await req.json();
 
-    const chat = model.startChat({
-        history: messages,
-        generationConfig: {
-            maxOutputTokens: 1000,
-        },
-    });
+    // Assuming data is an array of message objects
+    const userInput = data.map(msg => `${msg.role}: ${msg.content}`).join('\n');
+    const prompt = userInput + '\n\nAssistant: ' + sysPrompt;
 
-    const prompt = messages[messages.length - 1].content + "\n" + sysPrompt;
-
-    const result = await chat.sendMessageStream(prompt);
-
-    const encoder = new TextEncoder();
+    const result = await model.generateContentStream(prompt);
+    
     const stream = new ReadableStream({
         async start(controller) {
-            for await (const chunk of result.stream) {
-                const text = chunk.text();
-                controller.enqueue(encoder.encode(text));
+            const encoder = new TextEncoder();
+            try {
+                for await (const chunk of result.stream) {
+                    const content = chunk.text();
+                    if (content) {
+                        const text = encoder.encode(content);
+                        controller.enqueue(text);
+                    }
+                }
+            } catch (err) {
+                controller.error(err);
+            } finally {
+                controller.close();
             }
-            controller.close();
-        },
+        }
     });
-
-    return new Response(stream, {
-        headers: {
-            "Content-Type": "text/event-stream",
-            "Cache-Control": "no-cache",
-            "Connection": "keep-alive",
-        },
-    });
+    return new NextResponse(stream);
 }
