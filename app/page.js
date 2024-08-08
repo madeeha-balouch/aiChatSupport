@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, Stack } from "@mui/system";
 import { Button, TextField } from "@mui/material";
 import Markdown from 'react-markdown'
@@ -98,7 +98,7 @@ export default function Home() {
               <Box
                 //sx={style}
                 backgroundColor={
-                  message.role === "assistant" ? "lightblue" : "blue"
+                  message.role === "assistant" ? "orange" : "purple"
                 }
                 color={
                   message.role === "assistant" ? "black" : "white"
@@ -119,7 +119,7 @@ export default function Home() {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
           />
-          <Button variant="contained" onClick={sendMessages}>send</Button>
+          <Button variant="contained" onClick={sendMessages} color="secondary">send</Button>
         </Stack>
       </Stack>
     </Box>
