@@ -1,16 +1,34 @@
 "use client";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { Box, Stack } from "@mui/system";
+import { borderColor, Box, color, Stack } from "@mui/system";
 import { Button, TextField } from "@mui/material";
-import Markdown from 'react-markdown'
-
+import Markdown from "react-markdown";
+import SendIcon from "@mui/icons-material/Send";
+import IconButton from "@mui/material/IconButton";
 
 const style = {
-  backgroundColor: "lightgray",
-  color: "white",
-  borderRadius: 12,
-  padding: 3,
+  transition: "all 0.4s ease",
+  "&:hover": {
+    transform: "scale(1.05)",
+    boxShadow: "0 6px 8px rgba(0,0,0,0.15)",
+    borderColor: "black",
+  },
+  justifyContent: "center",
+};
+
+const style_1 = {
+  transition: "all 0.4s ease",
+  "&:hover": {
+    transform: "scale(1.05)",
+    boxShadow: "0 6px 8px rgba(0,0,0,0.15)",
+    borderColor: "black",
+  },
+  justifyContent: "center",
+  alignItems: "center",
+  position: "absolute",
+  top: "20%",
+  left: "20%",
 };
 
 export default function Home() {
@@ -57,26 +75,28 @@ export default function Home() {
             },
           ];
         });
-        return reader.read().then(processText)
+        return reader.read().then(processText);
       });
     });
   };
 
   return (
     <Box
+      //sx={style_1}
       width="100vw"
       height="100vh"
       display="flex"
       flexDirection="column"
       justifyContent="center"
       alignItems="center"
-      borderRadius={12}
+      //borderRadius={12}
+      backgroundColor="gray"
     >
       <Stack
         direction="column"
         width="500px"
         height="600px"
-        border="1px solid black"
+        border="3px solid yellow"
         borderRadius={10}
         p={2}
         spacing={3}
@@ -99,11 +119,9 @@ export default function Home() {
               <Box
                 //sx={style}
                 backgroundColor={
-                  message.role === "assistant" ? "lightgreen" : "green"
+                  message.role === "assistant" ? "yellow" : "green"
                 }
-                color={
-                  message.role === "assistant" ? "black" : "white"
-                }
+                color={message.role === "assistant" ? "black" : "white"}
                 fontWeight={500}
                 borderRadius={8}
                 padding={3}
@@ -113,14 +131,25 @@ export default function Home() {
             </Box>
           ))}
         </Stack>
-        <Stack direction="row" spacing={2}>
+        <Stack direction="row" spacing={3} padding={1}>
           <TextField
             label="message"
-            fullWidth
+            fullWidth={10}
+            color="success"
+            variant="outlined"
+            padding={2}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
           />
-          <Button variant="contained" onClick={sendMessages} color="secondary">send</Button>
+          <IconButton
+            aria-label="send"
+            onClick={sendMessages}
+            color="success"
+            sx={style}
+            size="normal"
+          >
+            <SendIcon />
+          </IconButton>
         </Stack>
       </Stack>
     </Box>
