@@ -9,7 +9,7 @@ import IconButton from "@mui/material/IconButton";
 
 const style = {
   transition: "all 0.4s ease",
-"&:hover": {
+  "&:hover": {
     transform: "scale(1.05)",
     boxShadow: "0 6px 8px rgba(0,0,0,0.15)",
     borderColor: "black",
@@ -85,7 +85,6 @@ export default function Home() {
     setMessages((messages) => {
       const updatedMessages = [...messages];
       updatedMessages[index].rating = newValue;
-      console.log(updatedMessages);
       return updatedMessages;
     });
   };
@@ -153,7 +152,6 @@ export default function Home() {
         </Stack>
         <Stack direction="row" spacing={3} padding={1}>
           <TextField
-            
             label="message"
             fullWidth
             color="success"
@@ -161,7 +159,6 @@ export default function Home() {
             padding={2}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-
           />
           <IconButton
             aria-label="send"
@@ -170,7 +167,7 @@ export default function Home() {
             sx={style}
             size="normal"
           >
-            
+            <SendIcon />
           </IconButton>
         </Stack>
       </Stack>
