@@ -74,9 +74,10 @@ export default function Home() {
     >
       <Stack
         direction="column"
-        width="600px"
-        height="700px"
+        width="500px"
+        height="600px"
         border="1px solid black"
+        borderRadius={10}
         p={2}
         spacing={3}
       >
@@ -98,7 +99,7 @@ export default function Home() {
               <Box
                 //sx={style}
                 backgroundColor={
-                  message.role === "assistant" ? "orange" : "purple"
+                  message.role === "assistant" ? "lightgreen" : "green"
                 }
                 color={
                   message.role === "assistant" ? "black" : "white"
