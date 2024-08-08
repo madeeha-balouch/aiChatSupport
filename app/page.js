@@ -2,14 +2,14 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { borderColor, Box, color, Stack } from "@mui/system";
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, Rating } from "@mui/material"; // Import Rating
 import Markdown from "react-markdown";
 import SendIcon from "@mui/icons-material/Send";
 import IconButton from "@mui/material/IconButton";
 
 const style = {
   transition: "all 0.4s ease",
-  "&:hover": {
+"&:hover": {
     transform: "scale(1.05)",
     boxShadow: "0 6px 8px rgba(0,0,0,0.15)",
     borderColor: "black",
@@ -35,7 +35,8 @@ export default function Home() {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      content: "Hi! I'm you support agent today, how can I assist you today?",
+      content: "Hi! I'm your support agent today, how can I assist you today?",
+      rating: null, // Add rating property
     },
   ]);
 
@@ -45,8 +46,8 @@ export default function Home() {
     setMessage("");
     setMessages((messages) => [
       ...messages,
-      { role: "user", content: message },
-      { role: "assistant", content: "" },
+      { role: "user", content: message, rating: null },
+      { role: "assistant", content: "", rating: null },
     ]);
     const response = fetch("api/chat", {
       method: "POST",
@@ -80,16 +81,23 @@ export default function Home() {
     });
   };
 
+  const handleRatingChange = (index, newValue) => {
+    setMessages((messages) => {
+      const updatedMessages = [...messages];
+      updatedMessages[index].rating = newValue;
+      console.log(updatedMessages);
+      return updatedMessages;
+    });
+  };
+
   return (
     <Box
-      //sx={style_1}
       width="100vw"
       height="100vh"
       display="flex"
       flexDirection="column"
       justifyContent="center"
       alignItems="center"
-      //borderRadius={12}
       backgroundColor="gray"
     >
       <Stack
@@ -112,12 +120,12 @@ export default function Home() {
             <Box
               key={index}
               display="flex"
-              justifyContent={
+              flexDirection="column"
+              alignItems={
                 message.role === "assistant" ? "flex-start" : "flex-end"
               }
             >
               <Box
-                //sx={style}
                 backgroundColor={
                   message.role === "assistant" ? "yellow" : "green"
                 }
@@ -128,18 +136,32 @@ export default function Home() {
               >
                 {message.content}
               </Box>
+              <Box>
+              {message.role === "assistant" && (
+                <Rating
+                  name={`rating-${index}`}
+                  value={message.rating || 0}
+                  onChange={(event, newValue) =>
+                    handleRatingChange(index, newValue)
+                  }
+                  sx={{ mt: 1, ml:1 }}
+                />
+              )}
+              </Box>
             </Box>
           ))}
         </Stack>
         <Stack direction="row" spacing={3} padding={1}>
           <TextField
+            
             label="message"
-            fullWidth={10}
+            fullWidth
             color="success"
             variant="outlined"
             padding={2}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+
           />
           <IconButton
             aria-label="send"
@@ -148,7 +170,7 @@ export default function Home() {
             sx={style}
             size="normal"
           >
-            <SendIcon />
+            
           </IconButton>
         </Stack>
       </Stack>
