@@ -3,12 +3,13 @@ import Image from "next/image";
 import { useState } from "react";
 import { Box, Stack } from "@mui/system";
 import { Button, TextField } from "@mui/material";
+import Markdown from 'react-markdown'
 
 
 const style = {
   backgroundColor: "lightgray",
   color: "white",
-  borderRadius: 16,
+  borderRadius: 12,
   padding: 3,
 };
 
@@ -69,6 +70,7 @@ export default function Home() {
       flexDirection="column"
       justifyContent="center"
       alignItems="center"
+      borderRadius={12}
     >
       <Stack
         direction="column"
@@ -96,11 +98,13 @@ export default function Home() {
               <Box
                 //sx={style}
                 backgroundColor={
-                  message.role === "assistant" ? "lightblue" : "secondary.main"
+                  message.role === "assistant" ? "lightblue" : "blue"
                 }
-                color="black"
+                color={
+                  message.role === "assistant" ? "black" : "white"
+                }
                 fontWeight={500}
-                borderRadius={16}
+                borderRadius={8}
                 padding={3}
               >
                 {message.content}
