@@ -1,176 +1,103 @@
 "use client";
-import Image from "next/image";
-import { useState, useEffect } from "react";
-import { borderColor, Box, color, Stack } from "@mui/system";
-import { Button, TextField, Rating } from "@mui/material"; // Import Rating
-import Markdown from "react-markdown";
-import SendIcon from "@mui/icons-material/Send";
-import IconButton from "@mui/material/IconButton";
 
-const style = {
-  transition: "all 0.4s ease",
-  "&:hover": {
-    transform: "scale(1.05)",
-    boxShadow: "0 6px 8px rgba(0,0,0,0.15)",
-    borderColor: "black",
-  },
-  justifyContent: "center",
-};
+import React, { useEffect, useState } from "react";
+import { Box, Typography, Button, Container } from "@mui/material";
+import { useRouter } from "next/navigation";
 
-const style_1 = {
-  transition: "all 0.4s ease",
-  "&:hover": {
-    transform: "scale(1.05)",
-    boxShadow: "0 6px 8px rgba(0,0,0,0.15)",
-    borderColor: "black",
-  },
-  justifyContent: "center",
-  alignItems: "center",
-  position: "absolute",
-  top: "20%",
-  left: "20%",
-};
+const Home = () => {
+  const router = useRouter();
+  const [welcomeText, setWelcomeText] = useState("");
 
-export default function Home() {
-  const [messages, setMessages] = useState([
-    {
-      role: "assistant",
-      content: "Hi! I'm your support agent today, how can I assist you today?",
-      rating: null, // Add rating property
-    },
-  ]);
+  useEffect(() => {
+    const text = "Welcome to AI Chatbot";
+    let index = 0;
+    const timer = setInterval(() => {
+      setWelcomeText(text.slice(0, index + 1));
+      index++;
+      if (index === text.length) clearInterval(timer);
+    }, 100);
+  }, []);
 
-  const [message, setMessage] = useState("");
-
-  const sendMessages = async () => {
-    setMessage("");
-    setMessages((messages) => [
-      ...messages,
-      { role: "user", content: message, rating: null },
-      { role: "assistant", content: "", rating: null },
-    ]);
-    const response = fetch("api/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify([...messages, { role: "user", content: message }]),
-    }).then(async (res) => {
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-
-      let result = "";
-      return reader.read().then(function processText({ done, value }) {
-        if (done) {
-          return result;
-        }
-        const text = decoder.decode(value || new Int8Array(), { stream: true });
-        setMessages((messages) => {
-          let lastMessage = messages[messages.length - 1];
-          let otherMessages = messages.slice(0, messages.length - 1);
-          return [
-            ...otherMessages,
-            {
-              ...lastMessage,
-              content: lastMessage.content + text,
-            },
-          ];
-        });
-        return reader.read().then(processText);
-      });
-    });
-  };
-
-  const handleRatingChange = (index, newValue) => {
-    setMessages((messages) => {
-      const updatedMessages = [...messages];
-      updatedMessages[index].rating = newValue;
-      return updatedMessages;
-    });
+  const handleGetStarted = () => {
+    router.push("/login");
   };
 
   return (
     <Box
-      width="100vw"
-      height="100vh"
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-      backgroundColor="gray"
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#f0f0f0",
+      }}
     >
-      <Stack
-        direction="column"
-        width="500px"
-        height="600px"
-        border="3px solid yellow"
-        borderRadius={10}
-        p={2}
-        spacing={3}
+      <Container
+        sx={{
+          textAlign: "center",
+          backgroundColor: "rgba(255, 255, 255, 0.9)",
+          padding: 4,
+          borderRadius: 2,
+          boxShadow: 3,
+          maxWidth: 600,
+          position: "relative",
+        }}
       >
-        <Stack
-          direction="column"
-          spacing={2}
-          flexGrow={1}
-          overflow="auto"
-          maxHeight="100%"
+        <Typography
+          variant="h2"
+          component="h1"
+          gutterBottom
+          sx={{
+            color: "#007bff",
+            fontWeight: "bold",
+            fontFamily: "Arial, sans-serif",
+            marginBottom: 2,
+          }}
         >
-          {messages.map((message, index) => (
-            <Box
-              key={index}
-              display="flex"
-              flexDirection="column"
-              alignItems={
-                message.role === "assistant" ? "flex-start" : "flex-end"
-              }
-            >
-              <Box
-                backgroundColor={
-                  message.role === "assistant" ? "yellow" : "green"
-                }
-                color={message.role === "assistant" ? "black" : "white"}
-                fontWeight={500}
-                borderRadius={8}
-                padding={3}
-              >
-                {message.content}
-              </Box>
-              <Box>
-              {message.role === "assistant" && (
-                <Rating
-                  name={`rating-${index}`}
-                  value={message.rating || 0}
-                  onChange={(event, newValue) =>
-                    handleRatingChange(index, newValue)
-                  }
-                  sx={{ mt: 1, ml:1 }}
-                />
-              )}
-              </Box>
-            </Box>
-          ))}
-        </Stack>
-        <Stack direction="row" spacing={3} padding={1}>
-          <TextField
-            label="message"
-            fullWidth
-            color="success"
-            variant="outlined"
-            padding={2}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          />
-          <IconButton
-            aria-label="send"
-            onClick={sendMessages}
-            color="success"
-            sx={style}
-            size="normal"
-          >
-            <SendIcon />
-          </IconButton>
-        </Stack>
-      </Stack>
+          {welcomeText}
+        </Typography>
+
+        <Typography
+          variant="h6"
+          component="p"
+          gutterBottom
+          sx={{
+            color: "#555",
+            fontFamily: "Arial, sans-serif",
+            marginBottom: 4,
+          }}
+        >
+          Empower yourself with knowledge about AI ethics, policies, and
+          guidelines through our dedicated chatbot. Our AI is here to help you
+          navigate the complexities of ethical AI use, ensuring you understand
+          the standards and practices that shape responsible technology.
+        </Typography>
+
+        <img
+          src="/img/image-bot.jpg"
+          alt="Centered Content"
+          style={{
+            display: "block",
+            margin: "20px auto",
+            borderRadius: "50%",
+            width: "150px",
+            height: "150px",
+            objectFit: "cover",
+          }}
+        />
+
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          onClick={handleGetStarted}
+          sx={{ mt: 4 }}
+        >
+          Get Started
+        </Button>
+      </Container>
     </Box>
   );
-}
+};
+
+export default Home;

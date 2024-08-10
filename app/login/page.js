@@ -44,7 +44,7 @@ const Login = () => {
         password.current.value
       )
         .then((userCredential) => {
-          router.push("/");
+          router.push("/aichatbot");
         })
         .catch((error) => {
           const errorMessage = error.message;
@@ -59,7 +59,7 @@ const Login = () => {
       )
         .then(() => {
           // Signed in
-          router.push("/");
+          router.push("/aichatbot");
         })
         .catch((error) => {
           const errorCode = error.code;
