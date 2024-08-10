@@ -3,20 +3,26 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, Button, Container } from "@mui/material";
 import { useRouter } from "next/navigation";
+import './globals.css'
 
 const Home = () => {
   const router = useRouter();
   const [welcomeText, setWelcomeText] = useState("");
+  const text = "Weclome to AI Chat Support"
 
   useEffect(() => {
-    const text = "Welcome to AI Chatbot";
     let index = 0;
     const timer = setInterval(() => {
       setWelcomeText(text.slice(0, index + 1));
       index++;
-      if (index === text.length) clearInterval(timer);
-    }, 100);
-  }, []);
+      if (index === text.length) {
+        clearInterval(timer);
+      }
+    }, 100); // Adjust the interval time if needed
+
+    // Cleanup function to clear the interval if the component unmounts
+    return () => clearInterval(timer);
+  }, [text]);
 
   const handleGetStarted = () => {
     router.push("/login");
@@ -54,7 +60,9 @@ const Home = () => {
             marginBottom: 2,
           }}
         >
-          {welcomeText}
+          <div className="welcome-text">
+      {welcomeText}
+    </div>
         </Typography>
 
         <Typography
@@ -63,7 +71,7 @@ const Home = () => {
           gutterBottom
           sx={{
             color: "#555",
-            fontFamily: "Arial, sans-serif",
+            fontFamily: "inherit",
             marginBottom: 4,
           }}
         >
@@ -87,8 +95,8 @@ const Home = () => {
         />
 
         <Button
-          variant="contained"
-          color="primary"
+          variant="outlined"
+          color="success"
           size="large"
           onClick={handleGetStarted}
           sx={{ mt: 4 }}
