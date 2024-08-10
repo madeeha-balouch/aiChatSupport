@@ -2,10 +2,14 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { borderColor, Box, color, Stack } from "@mui/system";
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, Typography } from "@mui/material";
 import Markdown from "react-markdown";
 import SendIcon from "@mui/icons-material/Send";
 import IconButton from "@mui/material/IconButton";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "../firebase";
+import LogoutIcon from "@mui/icons-material/Logout";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const style = {
   transition: "all 0.4s ease",
@@ -32,6 +36,22 @@ const style_1 = {
 };
 
 export default function Home() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+      } else {
+        setUser(null);
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const [messages, setMessages] = useState([
     {
       role: "assistant",
@@ -80,9 +100,18 @@ export default function Home() {
     });
   };
 
+  const handleLogout = async () => {
+    await signOut(auth);
+  };
+  if (loading) {
+    return <Typography>Loading...</Typography>;
+  }
+
+  if (!user) {
+    return <Typography>Please log in.</Typography>;
+  }
   return (
     <Box
-      //sx={style_1}
       width="100vw"
       height="100vh"
       display="flex"
@@ -92,6 +121,66 @@ export default function Home() {
       //borderRadius={12}
       backgroundColor="gray"
     >
+      <Box
+        sx={{
+          position: "absolute",
+          top: "20px",
+          right: "20px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          "&:hover .email": {
+            opacity: 1,
+            visibility: "visible",
+          },
+          "@media (max-width: 600px)": {
+            top: "10px",
+            right: "10px",
+          },
+        }}
+      >
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <AccountCircleIcon sx={{ color: "#333", fontSize: 30 }} />
+          <Button
+            variant="contained"
+            onClick={handleLogout}
+            sx={{
+              marginLeft: 1,
+              backgroundColor: "#333",
+              color: "#fff",
+              "&:hover": { backgroundColor: "#555" },
+              borderRadius: "8px",
+              padding: "4px 8px",
+              minWidth: "auto",
+              height: "36px",
+              "@media (max-width: 600px)": {
+                height: "30px",
+                padding: "3px 6px",
+              },
+            }}
+          >
+            <LogoutIcon />
+          </Button>
+        </Box>
+        <Typography
+          className="email"
+          sx={{
+            color: "#333",
+            fontWeight: "bold",
+            mt: 1,
+            opacity: 0,
+            visibility: "hidden",
+            transition: "opacity 0.3s ease, visibility 0.3s ease",
+            fontSize: "14px",
+            "@media (max-width: 600px)": {
+              fontSize: "12px",
+            },
+          }}
+        >
+          {user.email}
+        </Typography>
+      </Box>
+
       <Stack
         direction="column"
         width="500px"
