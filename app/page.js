@@ -41,11 +41,11 @@ const Home = () => {
       <Container
         sx={{
           textAlign: "center",
-          backgroundColor: "rgba(255, 255, 255, 0.9)",
+          backgroundColor: "rgba(255, 255, 200, 0.9)",
           padding: 4,
-          borderRadius: 2,
+          borderRadius: 5,
           boxShadow: 3,
-          maxWidth: 600,
+          maxWidth: 50,
           position: "relative",
         }}
       >
