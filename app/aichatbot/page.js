@@ -55,7 +55,7 @@ export default function Home() {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      content: "Hi! I'm you support agent today, how can I assist you today?",
+      content: "Hi! I'm your support agent today, how can I assist you today?",
     },
   ]);
 
@@ -119,7 +119,7 @@ export default function Home() {
       justifyContent="center"
       alignItems="center"
       //borderRadius={12}
-      backgroundColor="gray"
+      backgroundColor="black"
     >
       <Box
         sx={{
@@ -132,6 +132,7 @@ export default function Home() {
           "&:hover .email": {
             opacity: 1,
             visibility: "visible",
+            color: "yellow"
           },
           "@media (max-width: 600px)": {
             top: "10px",
@@ -185,7 +186,7 @@ export default function Home() {
         direction="column"
         width="500px"
         height="600px"
-        border="3px solid yellow"
+        border="3px solid white"
         borderRadius={10}
         p={2}
         spacing={3}
@@ -208,9 +209,9 @@ export default function Home() {
               <Box
                 //sx={style}
                 backgroundColor={
-                  message.role === "assistant" ? "yellow" : "green"
+                  message.role === "assistant" ? "white" : "orange"
                 }
-                color={message.role === "assistant" ? "black" : "white"}
+                color={message.role === "assistant" ? "black" : "black"}
                 fontWeight={500}
                 borderRadius={8}
                 padding={3}
@@ -224,16 +225,29 @@ export default function Home() {
           <TextField
             label="message"
             fullWidth={10}
-            color="success"
+            color="warning"
             variant="outlined"
             padding={2}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+            InputProps={{
+              style: { color: 'yellow' }
+            }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: 'white',
+                },
+              },
+              '& .MuiInputLabel-root': {
+                color: 'white',
+              },
+            }}
           />
           <IconButton
             aria-label="send"
             onClick={sendMessages}
-            color="success"
+            color="warning"
             sx={style}
             size="normal"
           >

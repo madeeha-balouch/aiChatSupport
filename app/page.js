@@ -35,7 +35,7 @@ const Home = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#f0f0f0",
+        backgroundColor: "black",
       }}
     >
       <Container
@@ -49,6 +49,18 @@ const Home = () => {
           position: "relative",
         }}
       >
+         <img
+          src="/img/image-bot.jpg"
+          alt="Centered Content"
+          style={{
+            display: "block",
+            margin: "20px auto",
+            borderRadius: "50%",
+            width: "150px",
+            height: "150px",
+            objectFit: "cover",
+          }}
+        />
         <Typography
           variant="h2"
           component="h1"
@@ -66,11 +78,11 @@ const Home = () => {
         </Typography>
 
         <Typography
-          variant="h6"
+          variant="h7"
           component="p"
           gutterBottom
           sx={{
-            color: "#555",
+            color: "black",
             fontFamily: "inherit",
             marginBottom: 4,
           }}
@@ -81,18 +93,6 @@ const Home = () => {
           the standards and practices that shape responsible technology.
         </Typography>
 
-        <img
-          src="/img/image-bot.jpg"
-          alt="Centered Content"
-          style={{
-            display: "block",
-            margin: "20px auto",
-            borderRadius: "50%",
-            width: "150px",
-            height: "150px",
-            objectFit: "cover",
-          }}
-        />
 
         <Button
           variant="outlined"
