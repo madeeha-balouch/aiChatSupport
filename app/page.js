@@ -41,7 +41,7 @@ const Home = () => {
       <Container
         sx={{
           textAlign: "center",
-          backgroundColor: "rgba(255, 255, 200, 0.9)",
+          backgroundColor: "rgba(0, 0, 0, 0.9)",
           padding: 4,
           borderRadius: 5,
           boxShadow: 3,
@@ -82,7 +82,7 @@ const Home = () => {
           component="p"
           gutterBottom
           sx={{
-            color: "black",
+            color: "white",
             fontFamily: "inherit",
             marginBottom: 4,
           }}
