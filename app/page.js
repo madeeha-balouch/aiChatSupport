@@ -44,7 +44,7 @@ const Home = () => {
           backgroundColor: "rgba(0, 0, 0, 0.9)",
           padding: 4,
           borderRadius: 5,
-          boxShadow: 3,
+          //boxShadow: '0 0 50px 10px rgba(251, 255, 255, 0.3)', // Changed to white shadow
           maxWidth: 50,
           position: "relative",
         }}
@@ -61,6 +61,15 @@ const Home = () => {
             objectFit: "cover",
           }}
         />
+        <Button
+          variant="outlined"
+          color="warning"
+          size="large"
+          onClick={handleGetStarted}
+          sx={{ mt: 1, borderColor: 'white', color: 'white' }}
+        >
+          Get Started
+        </Button>
         <Typography
           variant="h2"
           component="h1"
@@ -70,13 +79,14 @@ const Home = () => {
             fontWeight: "bold",
             fontFamily: "Arial, sans-serif",
             marginBottom: 2,
+            mt: 10,
           }}
         >
           <div className="welcome-text">
       {welcomeText}
     </div>
         </Typography>
-
+    <div className="sub-text">
         <Typography
           variant="h7"
           component="p"
@@ -92,17 +102,9 @@ const Home = () => {
           navigate the complexities of ethical AI use, ensuring you understand
           the standards and practices that shape responsible technology.
         </Typography>
+        </div>      
 
-
-        <Button
-          variant="outlined"
-          color="success"
-          size="large"
-          onClick={handleGetStarted}
-          sx={{ mt: 4 }}
-        >
-          Get Started
-        </Button>
+        
       </Container>
     </Box>
   );

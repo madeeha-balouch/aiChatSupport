@@ -81,7 +81,7 @@ const Login = () => {
       alignItems="center"
       height="100vh"
       sx={{
-        backgroundColor: "gray",
+        backgroundColor: "white",
       }}
     >
       <Grid container justifyContent="center">
@@ -94,12 +94,12 @@ const Login = () => {
           sx={{
             bgcolor: "#fff",
             p: 4,
-            border: "2px solid grey",
-            borderRadius: 2,
-            boxShadow: 3,
+            border: "2px solid yellow",
+            borderRadius: 4,
+            boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)',
           }}
         >
-          <Typography variant="h4" component="h2" gutterBottom align="center">
+          <Typography variant="h4" component="h1" gutterBottom align="center">
             {isSignInForm ? "Sign In" : "Sign Up"}
           </Typography>
           <form onSubmit={(e) => e.preventDefault()} style={{ width: "100%" }}>
@@ -134,10 +134,11 @@ const Login = () => {
               </Typography>
             )}
             <Button
-              variant="contained"
+              variant="outlined"
               color="primary"
               fullWidth
-              sx={{ mt: 2 }}
+              //sx={{ mt: 1, borderColor: 'white', color: 'white' }}
+              sx={{ mt: 2, border: '1px solid black', color: 'black'  }}
               onClick={handleButtonClick}
             >
               {isMobile
@@ -179,7 +180,7 @@ const Login = () => {
                     sx={{
                       textDecoration: "underline",
                       cursor: "pointer",
-                      padding: 0,
+                      padding: 4,
                       minWidth: "auto",
                       "&:hover": {
                         backgroundColor: "transparent", // To remove background on hover
