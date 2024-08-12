@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { borderColor, Box, color, Stack, keyframes } from "@mui/system";
-import { Button, TextField, Typography, Rating} from "@mui/material";
+import { Button, TextField, Typography, Rating, Grid} from "@mui/material";
 import Markdown from "react-markdown";
 import SendIcon from "@mui/icons-material/Send";
 import IconButton from "@mui/material/IconButton";
@@ -139,7 +139,7 @@ export default function Home() {
   if (!user) {
     return <Typography>Please log in.</Typography>;
   }
-  return (
+  return ( 
     <Box
       width="100vw"
       height="100vh"
@@ -150,6 +150,7 @@ export default function Home() {
       //borderRadius={12}
       backgroundColor="black"
     >
+      
       <Box
         sx={{
           position: "absolute",
@@ -210,15 +211,20 @@ export default function Home() {
           {user.email}
         </Typography>
       </Box>
-
+  
       <Stack
         direction="column"
-        width="500px"
+        width={{ xs: "80%", sm: "70%", md: "40%", lg: "40%" }}
         height="600px"
         border="3px solid white"
         borderRadius={10}
         p={2}
         spacing={3}
+        sx={{
+          "@media (max-width: 700px)": {
+            height: "80%",
+          },
+        }}
       >
         <Stack
           direction="column"
@@ -244,6 +250,12 @@ export default function Home() {
                 fontWeight={500}
                 borderRadius={8}
                 padding={3}
+                //maxWidth="80%"
+                sx={{
+                  "@media (max-width: 600px)": {
+                    padding: 1,
+                  },
+                }}
                 
               >
                 {message.content}
@@ -310,6 +322,9 @@ export default function Home() {
               '& .MuiInputLabel-root': {
                 color: 'white',
               },
+              "@media (max-width: 600px)": {
+                padding: 1,
+              },
             }}
           />
           <IconButton
@@ -324,5 +339,6 @@ export default function Home() {
         </Stack>
       </Stack>
     </Box>
+    
   );
-}
+};

@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Box, Typography, Button, Container } from "@mui/material";
+import { Box, Typography, Button, Container, Grid } from "@mui/material";
 import { useRouter } from "next/navigation";
 import './globals.css'
 
 const Home = () => {
   const router = useRouter();
   const [welcomeText, setWelcomeText] = useState("");
-  const text = "Weclome to AI Chat Support"
+  const text = "Welcome to AI Chat Support";
 
   useEffect(() => {
     let index = 0;
@@ -18,9 +18,8 @@ const Home = () => {
       if (index === text.length) {
         clearInterval(timer);
       }
-    }, 100); // Adjust the interval time if needed
+    }, 100);
 
-    // Cleanup function to clear the interval if the component unmounts
     return () => clearInterval(timer);
   }, [text]);
 
@@ -40,71 +39,69 @@ const Home = () => {
     >
       <Container
         sx={{
-          textAlign: "center",
           backgroundColor: "rgba(0, 0, 0, 0.9)",
           padding: 4,
           borderRadius: 5,
-          //boxShadow: '0 0 50px 10px rgba(251, 255, 255, 0.3)', // Changed to white shadow
-          maxWidth: 50,
+          maxWidth: "md",
           position: "relative",
         }}
       >
-         <img
-          src="/img/image-bot.jpg"
-          alt="Centered Content"
-          style={{
-            display: "block",
-            margin: "20px auto",
-            borderRadius: "50%",
-            width: "150px",
-            height: "150px",
-            objectFit: "cover",
-          }}
-        />
-        <Button
-          variant="outlined"
-          color="warning"
-          size="large"
-          onClick={handleGetStarted}
-          sx={{ mt: 1, borderColor: 'white', color: 'white' }}
-        >
-          Get Started
-        </Button>
-        <Typography
-          variant="h2"
-          component="h1"
-          gutterBottom
-          sx={{
-            color: "#007bff",
-            fontWeight: "bold",
-            fontFamily: "Arial, sans-serif",
-            marginBottom: 2,
-            mt: 10,
-          }}
-        >
-          <div className="welcome-text">
-      {welcomeText}
-    </div>
-        </Typography>
-    <div className="sub-text">
-        <Typography
-          variant="h7"
-          component="p"
-          gutterBottom
-          sx={{
-            color: "white",
-            fontFamily: "inherit",
-            marginBottom: 4,
-          }}
-        >
-          Empower yourself with knowledge about AI ethics, policies, and
-          guidelines through our dedicated chatbot. Our AI is here to help you
-          navigate the complexities of ethical AI use, ensuring you understand
-          the standards and practices that shape responsible technology.
-        </Typography>
-        </div>      
-
-        
+        <Grid container spacing={4} justifyContent="center">
+          <Grid item xs={12} md={12} textAlign="center">
+            <img
+              src="/img/image-bot.jpg"
+              alt="Centered Content"
+              style={{
+                borderRadius: "50%",
+                width: "150px",
+                height: "150px",
+                objectFit: "cover",
+                margin: "0 auto",
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} md={8} textAlign="center">
+            <Typography
+              variant="h2"
+              component="h1"
+              gutterBottom
+              sx={{
+                color: "#007bff",
+                fontWeight: "bold",
+                fontFamily: "Arial, sans-serif",
+                marginBottom: 2,
+              }}
+            >
+              <div className="welcome-text">{welcomeText}</div>
+            </Typography>
+            <Typography
+              variant="h7"
+              component="p"
+              gutterBottom
+              sx={{
+                color: "white",
+                fontFamily: "inherit",
+                marginBottom: 4,
+                alignContent:"justify"
+              }}
+            >
+              Empower yourself with knowledge about AI ethics, policies, and
+              guidelines through our dedicated chatbot. Our AI is here to help
+              you navigate the complexities of ethical AI use, ensuring you
+              understand the standards and practices that shape responsible
+              technology.
+            </Typography>
+            <Button
+              variant="outlined"
+              color="warning"
+              size="large"
+              onClick={handleGetStarted}
+              sx={{ mt: 1, borderColor: 'white', color: 'white' }}
+            >
+              Get Started
+            </Button>
+          </Grid>
+        </Grid>
       </Container>
     </Box>
   );
