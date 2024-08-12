@@ -292,13 +292,9 @@ export default function Home() {
             )}
             
             </Box>
-              
               </Box>
-              
             </Box>
-            
           ))}
-          
         </Stack>
       
         <Stack direction="row" spacing={3} padding={1}>
