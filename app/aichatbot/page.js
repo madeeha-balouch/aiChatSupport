@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { borderColor, Box, color, Stack } from "@mui/system";
-import { Button, TextField, Typography } from "@mui/material";
+import { borderColor, Box, color, Stack, keyframes } from "@mui/system";
+import { Button, TextField, Typography, Rating} from "@mui/material";
 import Markdown from "react-markdown";
 import SendIcon from "@mui/icons-material/Send";
 import IconButton from "@mui/material/IconButton";
@@ -10,6 +10,26 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+
+
+const typewriter = keyframes`
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+`;
+
+const blink = keyframes`
+  50% {
+    border-color: transparent;
+  }
+  100% {
+    border-color: black;
+  }
+`;
+
 
 const style = {
   transition: "all 0.4s ease",
@@ -56,6 +76,7 @@ export default function Home() {
     {
       role: "assistant",
       content: "Hi! I'm your support agent today, how can I assist you today?",
+      rating: null, // Add rating property
     },
   ]);
 
@@ -65,8 +86,8 @@ export default function Home() {
     setMessage("");
     setMessages((messages) => [
       ...messages,
-      { role: "user", content: message },
-      { role: "assistant", content: "" },
+      { role: "user", content: message, rating: null },
+      { role: "assistant", content: "", rating: null},
     ]);
     const response = fetch("api/chat", {
       method: "POST",
@@ -97,6 +118,14 @@ export default function Home() {
         });
         return reader.read().then(processText);
       });
+    });
+  };
+
+  const handleRatingChange = (index, newValue) => {
+    setMessages((messages) => {
+      const updatedMessages = [...messages];
+      updatedMessages[index].rating = newValue;
+      return updatedMessages;
     });
   };
 
@@ -215,12 +244,51 @@ export default function Home() {
                 fontWeight={500}
                 borderRadius={8}
                 padding={3}
+                
               >
                 {message.content}
-              </Box>
+               
+                <Box>
+            {message.role === "assistant" && (
+              <>
+              <Rating
+                name={`rating-${index}`}
+                value={message.rating || 0}
+                onChange={(event, newValue) =>
+                  handleRatingChange(index, newValue)
+                }
+                sx={{ mt: 1 }}
+              /> 
+            
+              <Typography 
+               variant="h6" 
+               fontWeight="light" 
+               fontSize={10}
+               
+               sx={{ color: 'gray', fontStyle: 'italic', ml:1,
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                letterSpacing: '0.1em',
+                animation: `${typewriter} 4s steps(40, end), ${blink} 0.75s step-end infinite`,
+
+                }}
+            >
+              rate the response
+            </Typography>
+            </>
+              
+            )}
+            
             </Box>
+              
+              </Box>
+              
+            </Box>
+            
           ))}
+          
         </Stack>
+      
         <Stack direction="row" spacing={3} padding={1}>
           <TextField
             label="message"
