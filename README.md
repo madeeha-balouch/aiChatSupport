@@ -11,4 +11,7 @@ https://ai-chat-support-eta.vercel.app/
 ## Check out the reddit post, feel free to leave any feedback/suggestions!
 https://www.reddit.com/r/myHeadstarter/s/36G8ywS5iW
 
+##Future work
+1. Make the bot domain specific (Implement RAG in Next.js)
+2. Add Memory Chains
 
